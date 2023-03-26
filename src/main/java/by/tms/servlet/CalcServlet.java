@@ -1,6 +1,11 @@
 package by.tms.servlet;
 
 
+import by.tms.entity.Operation;
+import by.tms.entity.OperationType;
+import by.tms.service.CalculatorService;
+import by.tms.validator.CalculatorValidator;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/calc", loadOnStartup = 1) //GET localhost:8080/calc?num1=2&num2=2&type=sum
+@WebServlet(value = "/calc", loadOnStartup = 1) //GET localhost:8080/calc?num1=25&num2=34&type=sum
 public class CalcServlet extends HttpServlet {
+    private final CalculatorService calculatorService = new CalculatorService();
+    private final CalculatorValidator calculatorValidator = new CalculatorValidator();
 
     //1.init
     //2.service
@@ -23,8 +30,6 @@ public class CalcServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.service(req, resp);
-//    System.out.println("Calc Service");
-//    doGet(req, resp);
     }
 
     @Override
@@ -34,35 +39,22 @@ public class CalcServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String sNum1 = req.getParameter("num1");
-        String sNum2 = req.getParameter("num2");
-        String type = req.getParameter("type");
 
-        double num1 = Double.parseDouble(sNum1);
-        double num2 = Double.parseDouble(sNum2);
-
-        double result = 0;
-
-        switch (type){
-            case "sum":
-                result = num1 + num2;
-                break;
-            case "sub":
-                result = num1 - num2;
-                break;
-            case "mul":
-                result = num1 * num2;
-                break;
-            case "div":
-                result = num1 / num2;
-                break;
-            default:
-                resp.getWriter().println("Operation not found!");
-//                System.out.println("Operation not found!");
-                break;
+        double sNum1 = Double.parseDouble(req.getParameter("num1"));
+        if (!calculatorValidator.isValidDigits(String.valueOf(sNum1))) {
+            resp.getWriter().print("num1 is not valid!");
         }
+        double sNum2 = Double.parseDouble(req.getParameter("num2"));
+        if (!calculatorValidator.isValidDigits(String.valueOf(sNum2))) {
+            resp.getWriter().print("num2 is not valid!");
+        }
+        OperationType opType = OperationType.valueOf(req.getParameter("type").toUpperCase());
 
-        resp.getWriter().print("Result = " + result);
+        Operation operation = new Operation(sNum1, sNum2, opType);
+
+        Operation result = calculatorService.calculate(operation);
+
+        resp.getWriter().print("Result = " + result.getResult());
     }
 }
 
