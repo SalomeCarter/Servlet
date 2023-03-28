@@ -13,41 +13,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(value = "/calc", loadOnStartup = 1) //GET localhost:8080/calc?num1=25&num2=34&type=sum
+@WebServlet(value = "/calc") //GET localhost:8080/calc?num1=25&num2=34&type=sum
 public class CalcServlet extends HttpServlet {
     private final CalculatorService calculatorService = new CalculatorService();
     private final CalculatorValidator calculatorValidator = new CalculatorValidator();
 
-    //1.init
-    //2.service
-    //3.destroy
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("Calc Init");
-    }
-
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.service(req, resp);
-    }
-
-    @Override
-    public void destroy() {
-        System.out.println("Calc Destroy");
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        double sNum1 = Double.parseDouble(req.getParameter("num1"));
-        if (!calculatorValidator.isValidDigits(String.valueOf(sNum1))) {
-            resp.getWriter().print("num1 is not valid!");
+        String num1 = req.getParameter("num1");
+        if (!calculatorValidator.isValidDigits(num1)) {
+            resp.getWriter().println("Invalid num1!");
+            return;
         }
-        double sNum2 = Double.parseDouble(req.getParameter("num2"));
-        if (!calculatorValidator.isValidDigits(String.valueOf(sNum2))) {
-            resp.getWriter().print("num2 is not valid!");
+
+        double sNum1 = Double.parseDouble(num1);
+
+        String num2 = req.getParameter("num2");
+        if (!calculatorValidator.isValidDigits(num2)) {
+            resp.getWriter().println("Invalid num2!");
+            return;
         }
+
+        double sNum2 = Double.parseDouble(num2);
+        
+
         OperationType opType = OperationType.valueOf(req.getParameter("type").toUpperCase());
 
         Operation operation = new Operation(sNum1, sNum2, opType);
