@@ -21,7 +21,11 @@ public class CalcServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/pages/calc.jsp").forward(req, resp);
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String num1 = req.getParameter("num1");
         if (!calculatorValidator.isValidDigits(num1)) {
             resp.getWriter().println("Invalid num1!");
@@ -37,7 +41,7 @@ public class CalcServlet extends HttpServlet {
         }
 
         double sNum2 = Double.parseDouble(num2);
-        
+
 
         OperationType opType = OperationType.valueOf(req.getParameter("type").toUpperCase());
 
@@ -45,7 +49,8 @@ public class CalcServlet extends HttpServlet {
 
         Operation result = calculatorService.calculate(operation);
 
-        resp.getWriter().print("Result = " + result.getResult());
+        req.setAttribute("result", result);
+        req.getRequestDispatcher("/pages/calc.jsp").forward(req, resp);
     }
 }
 
