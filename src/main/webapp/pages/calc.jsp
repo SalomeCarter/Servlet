@@ -18,5 +18,8 @@
     <button>Submit</button>
 </form>
 <p>Result = ${result.result}</p>
+<form action="/history">
+    <button>History</button>
+</form>
 </body>
 </html>

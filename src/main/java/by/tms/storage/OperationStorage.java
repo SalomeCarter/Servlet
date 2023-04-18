@@ -1,11 +1,11 @@
-//package by.tms.storage;
-//
-//import by.tms.entity.Operation;
-//
-//import java.util.List;
-//
-//public interface OperationStorage {
-//    public void save(Operation operation);
-//
-//    public List<Operation> findAll();
-//}
+package by.tms.storage;
+import by.tms.service.CalculatorOperation;
+
+import java.util.List;
+
+public interface OperationStorage {
+    public void save(CalculatorOperation operation);
+
+    public List<CalculatorOperation> findAll();
+    List<CalculatorOperation> findAllByUsername(String username);
+}

@@ -4,12 +4,6 @@ public class SumOperation implements CalculatorOperation {
     private double num1;
     private double num2;
     private double result;
-
-    public SumOperation(double num1, double num2) {
-        this.num1 = num1;
-        this.num2 = num2;
-    }
-
     public double getNum1() {
         return num1;
     }
@@ -26,14 +20,6 @@ public class SumOperation implements CalculatorOperation {
         this.num2 = num2;
     }
 
-    public double getResult() {
-        return result;
-    }
-
-    public void setResult(double result) {
-        this.result = result;
-    }
-
     @Override
     public void process() {
         this.result = num1 + num2;
@@ -41,7 +27,7 @@ public class SumOperation implements CalculatorOperation {
 
     @Override
     public double getFinalResult() {
-        return this.getResult();
+        return this.result;
     }
 
     @Override

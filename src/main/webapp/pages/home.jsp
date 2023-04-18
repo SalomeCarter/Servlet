@@ -33,7 +33,8 @@
 
   if (user != null) {
     out.print("<a href=\"/calc\">Calculator</a>\n" +
-            "<a href=\"/logout\">Logout</a>");
+            "<a href=\"/logout\">Logout</a>\n" +
+            "<a href=\"/history\">History</a>");
   }
 
 %>

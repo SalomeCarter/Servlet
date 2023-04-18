@@ -1,8 +1,8 @@
 package by.tms.servlet;
 
-
-import by.tms.entity.Operation;
 import by.tms.entity.OperationType;
+import by.tms.factory.OperationFactory;
+import by.tms.service.CalculatorOperation;
 import by.tms.service.CalculatorService;
 import by.tms.validator.CalculatorValidator;
 
@@ -17,6 +17,7 @@ import java.io.IOException;
 public class CalcServlet extends HttpServlet {
     private final CalculatorService calculatorService = new CalculatorService();
     private final CalculatorValidator calculatorValidator = new CalculatorValidator();
+    private final OperationFactory operationFactory = new OperationFactory();
 
 
     @Override
@@ -45,9 +46,9 @@ public class CalcServlet extends HttpServlet {
 
         OperationType opType = OperationType.valueOf(req.getParameter("type").toUpperCase());
 
-        Operation operation = new Operation(sNum1, sNum2, opType);
+        CalculatorOperation instance = operationFactory.getInstance(sNum1, sNum2, opType);
 
-        Operation result = calculatorService.calculate(operation);
+        double result = calculatorService.calculate(instance);
 
         req.setAttribute("result", result);
         req.getRequestDispatcher("/pages/calc.jsp").forward(req, resp);
